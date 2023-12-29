@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function create_user(Request $request){
-
+         
         // condition des data 
         $validator = Validator::make($request->all(), [
             'lastname' => 'required|string',
