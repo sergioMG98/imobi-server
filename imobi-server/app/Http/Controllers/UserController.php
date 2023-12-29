@@ -23,10 +23,11 @@ class UserController extends Controller
         
         if($validator->fails()){
             // si la validation des data echoue
-            return (
-                $validator -> Errors($validator)
-            );
-            
+            return response()->json([
+                'status' => 'false',
+                'data' => $validator -> Errors($validator),
+                'message' => 'valeur manquante ou incorrect',
+            ]);
         } else {
             // si elle reussi
 
@@ -45,14 +46,17 @@ class UserController extends Controller
                 ];
 
                 User::create($userChecked);
-                return (
-                    "inscription reussi"
-                );
-            } else {
+                return response()->json([
+                    'status' => 'true',
+                    'message' => 'inscription reussi',
+                ]);
 
-                return (
-                    "l'adresse mail existe déjà"
-                );
+            } else {
+                return response()->json([
+                    'status' => 'false',
+                    'message' => "l'adresse mail existe déjà",
+                ]);
+                
             }
         }
 
@@ -69,9 +73,11 @@ class UserController extends Controller
         
         if($validator->fails()){
             // si la validation des data echoue
-            return (
-                $validator -> Errors($validator)
-            );
+            return response()->json([
+                'status' => 'false',
+                'data' => $validator -> Errors($validator),
+                'message' => 'valeur manquante ou incorrect',
+            ]);
             
         } else {
             
@@ -82,18 +88,24 @@ class UserController extends Controller
                 
             if(count($user) != 0 ){
                 if(Hash::check($request->password, $user[0]->password)){
-                    return (
-                        'connexion reussi'
-                    );
+                    
+                    return response()->json([
+                        'status' => 'true',
+                        'message' => 'connexion reussi',
+                    ]);
+
                 } else {
-                    return (
-                        "mot de passe incorrecte"
-                    );
+                    return response()->json([
+                        'status' => 'false',
+                        'message' => 'mot de passe incorrecte',
+                    ]);
                 }
             } else {
-                return (
-                    "l'adresse mail entrée n'existe pas"
-                );
+                return response()->json([
+                    'status' => 'false',
+                    'message' => "l'adresse mail entrée n'existe pas",
+                ]);
+
             }
         }
     }
