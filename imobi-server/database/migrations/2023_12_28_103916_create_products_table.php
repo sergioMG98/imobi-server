@@ -21,9 +21,11 @@ return new class extends Migration
             $table->integer('chambre');
             $table->integer('terrasse')->nullable();
             $table->integer('cave')->nullable();
-            $table->string('bilanEnergenique');
+            $table->string('bilanEnergetique');
             $table->integer('longitude')->nullable();
             $table->integer('latitude')->nullable();
+            $table->string('status');
+            $table->integer('prix');
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
         });

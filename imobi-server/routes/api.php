@@ -24,4 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [UserController::class , 'create_user']);
 Route::post('/login' , [UserController::class , 'login']);
 
+// a mettre sur midleware
 Route::post('/addProduct', [ProductController::class , 'addProduct']);
+Route::get('getProduct', [ProductController::class, 'getProduct']);
+Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);

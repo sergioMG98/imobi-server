@@ -55,4 +55,35 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function getProduct(){
+        $product = DB::table('products')
+            ->get();
+
+        if(count($product) != 0){
+            return response()->json([
+                'status' => 'true',
+                'message' => 'obtention des product reussi',
+                'product' => $product,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'false',
+                'message' => 'une erreu est survenue lors de la recuperation des product',
+            ]);
+        }
+
+    }
+    public function getProductSpecific(Request $request){
+        
+        $product = DB::table('products')
+            ->where('status', $request->status)
+            ->get();
+       /*  dd($request); */
+        
+        return response()->json([
+            'product' => $product,
+        ]);
+
+    }
 }
