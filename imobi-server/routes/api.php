@@ -28,3 +28,4 @@ Route::post('/login' , [UserController::class , 'login']);
 Route::post('/addProduct', [ProductController::class , 'addProduct']);
 Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);
+Route::post('getProductById', [ProductController::class, 'getProductById']);

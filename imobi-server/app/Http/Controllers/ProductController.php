@@ -86,4 +86,18 @@ class ProductController extends Controller
         ]);
 
     }
+    public function getProductById(Request $request){
+
+        $details = DB::table('products')
+            ->where('products.id', $request->status)
+            ->get();
+        $caracteristiques = DB::table('caracteristiques')
+            ->where('product_id', $request->status)
+            ->get();
+
+        return response()->json([
+            'product' => $details,
+            'caracteristique_product' => $caracteristiques,
+        ]);
+    }
 }

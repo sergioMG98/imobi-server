@@ -13,15 +13,6 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
-            $table->integer('piece');
-            $table->integer('surfaceTerrain')->nullable();
-            $table->integer('surface');
-            $table->integer('salleDeBain');
-            $table->integer('chambre');
-            $table->integer('terrasse')->nullable();
-            $table->integer('cave')->nullable();
-            $table->string('bilanEnergetique');
             $table->integer('longitude')->nullable();
             $table->integer('latitude')->nullable();
             $table->string('status');
