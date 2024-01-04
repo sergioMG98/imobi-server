@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Caracteristique;
+use App\Models\Client;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,52 +12,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function addProduct(Request $request){
 
-        // condition des data 
-        $validator = Validator::make($request->all(), [
-            "description" => 'required', 
-            "piece" => 'required', 
-            "surfaceTerrain" => 'required',
-            "surface" => 'required',
-            "salleDeBain" => 'required', 
-            "chambre" => 'required', 
-            "terrasse" => 'required', 
-            "cave" => 'required', 
-            "bilanEnergetique" => 'required',
-        ]);
-
-        if($validator->fails()){
-            // si la validation des data echoue
-            return response()->json([
-                'status' => 'false',
-                'data' => $validator -> Errors($validator),
-                'message' => 'valeur manquante ou incorrect',
-            ]);
-        } else {
-
-            $user_id = 1;
-
-            Product::create([
-                "description" => $request->description, 
-                "piece" => $request->piece, 
-                "surfaceTerrain" => $request->surfaceTerrain,
-                "surface" => $request->surface,
-                "salleDeBain" => $request->salleDeBain, 
-                "chambre" => $request->chambre, 
-                "terrasse" => $request->terrasse, 
-                "cave" => $request->cave, 
-                "bilanEnergenique" => $request->bilanEnergetique,
-                "user_id" => $user_id,
-            ]);
-
-            return response()->json([
-                'status' => 'true',
-                'message' => 'création de product reussi',
-            ]);
-        }
-    }
-
+    // pour affichage ( home )
     public function getProduct(){
         $product = DB::table('products')
             ->get();
@@ -74,18 +32,19 @@ class ProductController extends Controller
         }
 
     }
+    // pour affichage ( filtre )
     public function getProductSpecific(Request $request){
         
         $product = DB::table('products')
             ->where('status', $request->status)
             ->get();
-       /*  dd($request); */
         
         return response()->json([
             'product' => $product,
         ]);
 
     }
+    // pour affichage des details ( detailsPage )
     public function getProductById(Request $request){
 
         $details = DB::table('products')
@@ -100,4 +59,5 @@ class ProductController extends Controller
             'caracteristique_product' => $caracteristiques,
         ]);
     }
+
 }

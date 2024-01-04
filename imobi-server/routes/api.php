@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,7 +27,10 @@ Route::post('/register', [UserController::class , 'create_user']);
 Route::post('/login' , [UserController::class , 'login']);
 
 // a mettre sur midleware
-Route::post('/addProduct', [ProductController::class , 'addProduct']);
+Route::post('/addProduct', [DashboardController::class , 'addProduct']);
+Route::get('/getProductSeller', [DashboardController::class , 'getProductSeller']);
+Route::post('/updateProduct', [DashboardController::class , 'updateProduct']);
+
 Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);
 Route::post('getProductById', [ProductController::class, 'getProductById']);
