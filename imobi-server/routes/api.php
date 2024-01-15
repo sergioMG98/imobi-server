@@ -36,4 +36,7 @@ Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);
 Route::post('getProductById', [ProductController::class, 'getProductById']);
 
-Route::get('/calendar' , [CalendarController::class, 'index'])->name('calendar.index');
+Route::post('/newEvent' , [CalendarController::class, 'addEvents']);
+Route::get('/allEvents' , [CalendarController::class, 'getEvents']);
+Route::post('/updateEvent' , [CalendarController::class, 'updateEvents']);
+Route::post('/deleteEvent', [CalendarController::class, 'deleteEvents']);

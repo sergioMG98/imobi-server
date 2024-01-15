@@ -14,7 +14,25 @@ class DashboardController extends Controller
 {
     // ajout de lieux ( dashboard )
     public function addProduct(Request $request){
-    
+        
+        /* dd($request); */
+
+/* 		"description" : "de", 
+		"piece" : 1, 
+		"surfaceTerrain" : 1,
+		"surface" : 1,
+		"salleDeBain"  : 1, 
+		"chambre" : 1, 
+		"terrasse"  : 1, 
+		"cave"  : 1, 
+		"bilanEnergetique"  : 1,
+		"prix"  : 1,
+		"status" : "rent",
+		"lastname": "de",
+		"firstname" : "de",
+		"email" : "de",
+		"phone"  : 1
+ */
 
         // condition des data 
         $validator = Validator::make($request->all(), [
