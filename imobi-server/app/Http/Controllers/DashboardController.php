@@ -64,54 +64,49 @@ class DashboardController extends Controller
 
             $user_id = 1;
 
-            $test = Product::create([
-                "prix" =>$request->prix,
-                "status" => $request->status,
-                "user_id" => $user_id,
-            ]);
-            $test->caracteristique()->create([
-                "description" => $request->description, 
-                "piece" => $request->piece, 
-                "surfaceTerrain" => $request->surfaceTerrain,
-                "surface" => $request->surface,
-                "salleDeBain" => $request->salleDeBain, 
-                "chambre" => $request->chambre, 
-                "terrasse" => $request->terrasse, 
-                "cave" => $request->cave, 
-                "bilanEnergetique" => $request->bilanEnergetique,
+            try {
+                $test = Product::create([
+                    "prix" =>$request->prix,
+                    "status" => $request->status,
+                    "description" => $request->description, 
+                    "piece" => $request->piece, 
+                    "surfaceTerrain" => $request->surfaceTerrain,
+                    "surface" => $request->surface,
+                    "salleDeBain" => $request->salleDeBain, 
+                    "chambre" => $request->chambre, 
+                    "terrasse" => $request->terrasse, 
+                    "cave" => $request->cave, 
+                    "bilanEnergetique" => $request->bilanEnergetique,
+                    "type" => "appartement",
+                    "user_id" => $user_id,
+                ]);
                 
-            ]);
-            $test->client()->create([
-                'lastname' => $request->lastname,
-                'firstname' => $request->firstname,
-                'email' => $request->email,
-                'phone' => $request->phone, 
-            ]);
-            
-            return response()->json([
-                'status' => 'true',
-                'message' => 'création de product reussi',
-            ]);
+                return response()->json([
+                    'status' => 'true',
+                    'message' => 'création de product reussi',
+                ]);
+            } catch (\Throwable $th) {
+                
+                return response()->json([
+                    'status' => 'false',
+                    'message' => 'création de product echoué',
+                    'error' => $th,
+                    'ver' => $request->description
+                ]);
+            }
+
+
         }
     }
     // affichage de lieux ( dashboard )
     public function getProductSeller(){
-        /* $test = array(); */
 
         $user_id = 1;   
 
         $product = DB::table('products')
             ->where('user_id', $user_id )
-            ->join('clients', 'products.id', 'clients.product_id')
             ->join('caracteristiques', 'products.id', 'caracteristiques.product_id')
             ->get();
-
-/*         foreach ($product as $key => $value) {
-            $t = $value->id;
-            $d = Product::find($t)->client;
-            array_push($test , $d);
-        } */
-       /*  dd($product); */
       
 
         return response()->json([

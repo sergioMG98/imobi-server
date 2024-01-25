@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['longitude','latitude', 'status','prix' ,'user_id'];
+    protected $fillable = ['status', 'prix', 'description', 'surface', 'ges', 'dpe', 'type', 'piece', 'surfaceTerrain', 'salleDeBain', 'chambre', 'terrasse', 'balcon', 'garage', 'piscine', 'ascenseur', 'cave', 'longitude', 'latitude'];
 
     public function client(): HasOne
     {

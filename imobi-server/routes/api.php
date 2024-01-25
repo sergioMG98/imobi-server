@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,3 +41,6 @@ Route::post('/newEvent' , [CalendarController::class, 'addEvents']);
 Route::get('/allEvents' , [CalendarController::class, 'getEvents']);
 Route::post('/updateEvent' , [CalendarController::class, 'updateEvents']);
 Route::post('/deleteEvent', [CalendarController::class, 'deleteEvents']);
+
+Route::get('/getAllCustomer', [ClientController::class, 'getAllCustomer']);
+Route::post('/getProductOfCustomer', [ClientController::class, 'getProductOfCustomer']);
