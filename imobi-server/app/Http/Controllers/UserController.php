@@ -109,4 +109,36 @@ class UserController extends Controller
             }
         }
     }
+
+    public function someInformationSeller(){
+
+        $dataSellerFiltred = array();
+
+        try {
+            $dataSelet = DB::table('users')
+                ->get();
+        
+            foreach ($dataSelet as $key => $value) {
+                array_push($dataSellerFiltred, (object) [
+                    "seller_id" => $value->id,
+                    "lastname" => $value->lastname, 
+                    "firstname" => $value->firstname,
+                    "latitude" => 43.7042,
+                    "longitude" => 7.27422,
+                ]);
+                
+            }
+            return response()->json([
+                "status" => "true",
+                "data" => $dataSellerFiltred,
+            ]);
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                "status" => "false",
+                "message" => "erreur lors de la recuperation",
+            ]);
+        }
+
+    }
 }

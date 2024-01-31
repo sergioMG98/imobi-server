@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [UserController::class , 'create_user']);
 Route::post('/login' , [UserController::class , 'login']);
 
+Route::get('/getUsers',[UserController::class , 'someInformationSeller']);
+
 // a mettre sur midleware
 Route::post('/addProduct', [DashboardController::class , 'addProduct']);
 Route::get('/getProductSeller', [DashboardController::class , 'getProductSeller']);
