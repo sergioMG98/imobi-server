@@ -12,7 +12,7 @@ class Client extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['lastname','firstname','email','phone'   ];
+    protected $fillable = ['lastname','firstname','email','phone', 'user_id' ];
 
     public function customerProduct(): BelongsToMany
     {

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +21,27 @@ use App\Http\Controllers\ClientController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::post('/addProduct', [DashboardController::class , 'addProduct']);
+    Route::get('/getProductSeller', [DashboardController::class , 'getProductSeller']);
+    Route::post('/updateProduct', [DashboardController::class , 'updateProduct']);
+    Route::get('/getMessage', [DashboardController::class, 'getMessage']);
+    Route::get('/getProfil', [DashboardController::class, 'getProfil']);
+    Route::post('/updateProfil', [DashboardController::class, 'updateProfil']);
+    Route::get('/getAllCustomer', [DashboardController::class, 'getAllCustomer']);
 
+    Route::post('/newEvent' , [CalendarController::class, 'addEvents']);
+    Route::get('/allEvents' , [CalendarController::class, 'getEvents']);
+    Route::post('/updateEvent' , [CalendarController::class, 'updateEvents']);
+    Route::post('/deleteEvent', [CalendarController::class, 'deleteEvents']);
+
+
+    Route::post('/getProductOfCustomer', [ClientController::class, 'getProductOfCustomer']);
+    
+    Route::post('/logout' , [UserController::class , 'logout']);
+    
+    
 });
 
 Route::post('/register', [UserController::class , 'create_user']);
@@ -30,19 +49,13 @@ Route::post('/login' , [UserController::class , 'login']);
 
 Route::get('/getUsers',[UserController::class , 'someInformationSeller']);
 
+Route::post('/setMessage' , [MessageController::class , 'setMessage']);
+
 // a mettre sur midleware
-Route::post('/addProduct', [DashboardController::class , 'addProduct']);
-Route::get('/getProductSeller', [DashboardController::class , 'getProductSeller']);
-Route::post('/updateProduct', [DashboardController::class , 'updateProduct']);
+
+Route::post('getProductById', [ProductController::class, 'getProductById']); // peut etre pas cela
+
 
 Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);
-Route::post('getProductById', [ProductController::class, 'getProductById']);
 
-Route::post('/newEvent' , [CalendarController::class, 'addEvents']);
-Route::get('/allEvents' , [CalendarController::class, 'getEvents']);
-Route::post('/updateEvent' , [CalendarController::class, 'updateEvents']);
-Route::post('/deleteEvent', [CalendarController::class, 'deleteEvents']);
-
-Route::get('/getAllCustomer', [ClientController::class, 'getAllCustomer']);
-Route::post('/getProductOfCustomer', [ClientController::class, 'getProductOfCustomer']);

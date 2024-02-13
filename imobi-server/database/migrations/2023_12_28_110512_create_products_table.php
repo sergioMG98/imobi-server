@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('status');
             $table->integer('prix');
-            $table->string('description');
+            $table->text('description');
             $table->integer('surface');   
             $table->string('ges');
             $table->string('dpe');
@@ -33,8 +33,10 @@ return new class extends Migration
             $table->integer('piscine')->nullable();
             $table->integer('ascenseur')->nullable();
             $table->integer('cave')->nullable();
-            $table->integer('longitude')->nullable();
-            $table->integer('latitude')->nullable();
+            $table->float('longitude', 8, 6)->nullable();
+            $table->float('latitude', 8, 6)->nullable();
+            $table->string('ville');
+            $table->string('label');
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
         });

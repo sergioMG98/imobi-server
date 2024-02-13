@@ -1,5 +1,5 @@
 <?php
-
+//https://educrak.com/chapitre-content/64cfc0bf1ec60-authentification-des-api-laravel-avec-sanctum
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    //creation de compte
     public function create_user(Request $request){
          
         // condition des data 
@@ -28,6 +29,7 @@ class UserController extends Controller
                 'data' => $validator -> Errors($validator),
                 'message' => 'valeur manquante ou incorrect',
             ]);
+
         } else {
             // si elle reussi
 
@@ -38,17 +40,20 @@ class UserController extends Controller
 
             if(count($alreadyExist) == 0 ){
 
-                $userChecked = [
+                $user = User::create([
                     'lastname' => $request->lastname,
                     'firstname' => $request->firstname,
                     'email' => $request->email,
                     'password' => $request->password,
-                ];
+                ]);
 
-                User::create($userChecked);
+                $token = $user->createToken('TaskApp')->plainTextToken;
+
                 return response()->json([
                     'status' => 'true',
                     'message' => 'inscription reussi',
+                    'token' => $token,
+                    "user" => $user,
                 ]);
 
             } else {
@@ -63,8 +68,10 @@ class UserController extends Controller
 
     }
 
+
     public function login(Request $request){
         
+        /* dd($request); */
         // condition des data 
         $validator = Validator::make($request->all(), [
             'email' => 'required|string',
@@ -81,17 +88,21 @@ class UserController extends Controller
             
         } else {
             
-            
             $user = DB::table('users')
                 ->where('email', $request->email)
                 ->get();
                 
             if(count($user) != 0 ){
+
                 if(Hash::check($request->password, $user[0]->password)){
                     
+                    $us = User::find($user[0]->id);
+                    $token = $us->createToken('token-name')->plainTextToken;
+
                     return response()->json([
                         'status' => 'true',
                         'message' => 'connexion reussi',
+                        'token' => $token,
                     ]);
 
                 } else {
@@ -123,8 +134,9 @@ class UserController extends Controller
                     "seller_id" => $value->id,
                     "lastname" => $value->lastname, 
                     "firstname" => $value->firstname,
-                    "latitude" => 43.7042,
-                    "longitude" => 7.27422,
+                    "phone" => $value->phone,
+                    "latitude" => $value->latitude,
+                    "longitude" => $value->longitude,
                 ]);
                 
             }
@@ -140,5 +152,14 @@ class UserController extends Controller
             ]);
         }
 
+    }
+
+    // deconnexion
+    public function logout(){
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            "message" => "déconnecté"
+        ]);
     }
 }

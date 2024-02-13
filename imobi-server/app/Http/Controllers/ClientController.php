@@ -10,18 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
-    public function getAllCustomer(){
-        $user_id = 1;
-
-        $customers = DB::table('clients')
-            ->where('clients.user_id', $user_id)
-            ->get();
-
-        
-        return response()->json([
-            'customers' => $customers,
-        ]);
-    }
 
     public function getProductOfCustomer(Request $request){
 
