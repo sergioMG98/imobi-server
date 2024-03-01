@@ -28,10 +28,10 @@ class Product extends Model
         return $this->hasOne(Caracteristique::class);
     }
 
-    public function picture(): BelongsToMany
+/*     public function picture(): BelongsToMany
     {
         return $this->belognsToMany(Picture::class);
-    }
+    } */
 
 
 }

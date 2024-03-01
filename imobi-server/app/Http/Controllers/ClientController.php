@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
-
+    // va recup les produits des customers
     public function getProductOfCustomer(Request $request){
 
         try {

@@ -36,11 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updateEvent' , [CalendarController::class, 'updateEvents']);
     Route::post('/deleteEvent', [CalendarController::class, 'deleteEvents']);
 
-
     Route::post('/getProductOfCustomer', [ClientController::class, 'getProductOfCustomer']);
     
-    Route::post('/logout' , [UserController::class , 'logout']);
-    
+    Route::get('/logout' , [UserController::class , 'logout']);
     
 });
 
@@ -51,10 +49,7 @@ Route::get('/getUsers',[UserController::class , 'someInformationSeller']);
 
 Route::post('/setMessage' , [MessageController::class , 'setMessage']);
 
-// a mettre sur midleware
-
-Route::post('getProductById', [ProductController::class, 'getProductById']); // peut etre pas cela
-
+Route::post('getProductById', [ProductController::class, 'getProductById']); 
 
 Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Caracteristique;
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Picture;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
+
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -53,6 +57,7 @@ class DashboardController extends Controller
             "firstname" => 'required',
             "email" => 'required',
             "phone" => 'required',
+            "image" => 'required|image',
         ]);
         
         if($validator->fails()){
@@ -65,7 +70,11 @@ class DashboardController extends Controller
 
         } else {
 
-            /* $user_id = 1; */
+            /* image */
+            /** @var UploadedFile $image */
+            $image = $request->image;
+            
+            $imagePath = $request->file('image')->store('blog', 'public');
             
             try {
                 $test = Product::create([
@@ -76,25 +85,31 @@ class DashboardController extends Controller
                     "ges" => $request->ges,
                     "dpe" => $request->dpe,
                     "type" => $request->type,
-                    "piece" => $request->piece, 
-                    "surfaceTerrain" => $request->surfaceTerrain,
-                    "salleDeBain" => $request->salleDeBain, 
-                    "chambre" => $request->chambre, 
-                    "terrasse" => $request->terrasse,
-                    "balcon" => $request->balcon,
-                    "garage" => $request->garage, 
-                    "piscine" => $request->piscine,
-                    "ascenseur" => $request->ascenseur,
-                    "cave" => $request->cave,
-                    "longitude" => $request->longitude,
-                    "latitude" => $request->latitude,
+                    "piece" => $request->piece != 'undefined' ? $request->piece : null ,
+                    "surfaceTerrain" => $request->surfaceTerrain != 'undefined' ? $request->surfaceTerrain : null ,
+                    "salleDeBain" => $request->salleDeBain != 'undefined' ? $request->salleDeBain : null,
+                    "chambre" => $request->chambre != 'undefined' ? $request->chambre : null , 
+                    "terrasse" => $request->terrasse != 'undefined' ? $request->terrasse : null ,
+                    "balcon" => $request->balcon != 'undefined' ? $request->balcon : null ,
+                    "garage" => $request->garage != 'undefined' ? $request->garage : null ,
+                    "piscine" => $request->piscine != 'undefined' ? $request->piscine : null ,
+                    "ascenseur" => $request->ascenseur != 'undefined' ? $request->ascenseur : null ,
+                    "cave" => $request->cave != 'undefined' ? $request->cave : null ,
+                    "longitude" => $request->longitude != 'undefined' ? $request->longitude : null ,
+                    "latitude" => $request->latitude != 'undefined' ? $request->latitude : null ,
+                    
+
                     "ville" => $request->ville,
                     "label" => $request->label,
                     "user_id" => Auth::id(),
                 ]);
+                //chemin de l'image
+                $imageTable = Picture::create([
+                    "picture" => $imagePath,
+                    "product_id" => $test->id,
+                ]);
 
-
-                if ($request->idCustomer == null) {
+                if ($request->idCustomer == null || $request->idCustomer == "undefined" ) {
 
                     $customers = Client::create([
                         "lastname" => $request->lastname,
@@ -191,12 +206,65 @@ class DashboardController extends Controller
                 $product ->cave = $request->cave;
                 $product ->ges = $request->ges;
                 $product ->dpe = $request->dpe;
+
+                $product ->type = $request->type;
+                $product ->balcon = $request->balcon;
+                $product ->garage = $request->garage;
+                $product ->piscine = $request->piscine;
+                $product ->ascenseur = $request->ascenseur;
     
                 $product ->save();
+                // suppression d'image
+                if (  $request->deleteImage != null) {
+                    
+                    try {
+                        foreach (explode(",", $request->deleteImage) as $key => $value) {
+                            // supprime dans la bdd
+                            $imageDelete = Picture::where('picture', explode("http://127.0.0.1:8000/storage/", $request->deleteImage)[1])
+                                ->delete();
+                            // supprime dans le storage
+                            if(Storage::disk('public')->exists(explode("http://127.0.0.1:8000/storage/", $request->deleteImage)[1])){
+                                Storage::disk('public')->delete(explode("http://127.0.0.1:8000/storage/", $request->deleteImage)[1]);
+                                
+                            }else {
+                                return response()->json([
+                                    'status' => 'false',
+                                    'message' => "n'existe pas",
+                                ]);
+                            }
+
+
+                        }
+                    } catch (\Throwable $th) {
+                        return response()->json([
+                            'status' => 'false',
+                            'message' => "erreur lors supression d'image",
+                            'error' => $th
+                        ]);
+                    }
+
+                }
+                // ajout image
+                if ($request->newImage != "undefined") {
+                    // ajout image dans le storage
+                    $imagePath = $request->file('newImage')->store('blog', 'public');
+                    
+                    //chemin de l'image
+                    $imageTable = Picture::create([
+                        "picture" => $imagePath,
+                        "product_id" => $request->id_product,
+                    ]); 
+                    /* return response()->json([
+                        'status' => 'false',
+                        'message' => "erreur lors de l'ajour d'image",
+                        'error' => $request->newImage
+                    ]); */
+                }
 
                 return response()->json([
                     'status' => 'true',
                     'message' => 'modification reussi',
+                    'er' => $request->newImage
                 ]);
             } catch (\Throwable $th) {
                 
@@ -209,7 +277,7 @@ class DashboardController extends Controller
 
 
 
-            return (['data' => $request]);
+           /*  return (['data' => $request]); */
         }
 
         
@@ -242,6 +310,8 @@ class DashboardController extends Controller
             "lastname" => $user[0]->lastname,
             "firstname" => $user[0]->firstname,
             "email" => $user[0]->email,
+            "phone" => $user[0]->phone,
+            "label" => $user[0]->label,
         ];
 
         return response()->json([

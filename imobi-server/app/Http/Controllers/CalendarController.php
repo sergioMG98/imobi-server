@@ -6,10 +6,12 @@ use App\Models\Event;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CalendarController extends Controller
 {
+    // cree un event
     public function addEvents(Request $request){
         
         $validator = Validator::make($request->all(), [
@@ -31,7 +33,7 @@ class CalendarController extends Controller
                 'data' => $validator -> Errors($validator),
             ]);
         } else {
-            $user_id = 1;
+            $user_id = Auth::id();
             
             try {
                 $event = Event::create([
@@ -74,9 +76,10 @@ class CalendarController extends Controller
         }
 
     }
+    // va recupere tous les events
     public function getEvents(){
 
-        $user_id = 1;
+        $user_id = Auth::id();
 
 
         $events = DB::table('events')
@@ -96,6 +99,7 @@ class CalendarController extends Controller
         }
 
     } 
+    // modifie les events
     public function updateEvents(Request $request){
 
 
@@ -130,6 +134,7 @@ class CalendarController extends Controller
             ]);
         }
     }
+    // supprime les events
     public function deleteEvents(Request $request){
 
         try {
@@ -138,14 +143,14 @@ class CalendarController extends Controller
 
             return response()->json([
                 'status' => 'true',
-                'message' => 'suppression reussi'
+                'message' => 'suppression réussie'
             ]);
 
         } catch (\Throwable $th) {
             
             return response()->json([
                 'status' => 'false',
-                'message' => 'suppression echoué'
+                'message' => 'suppression échouer'
             ]);
         }
 

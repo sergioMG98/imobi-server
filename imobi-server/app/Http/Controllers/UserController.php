@@ -67,8 +67,7 @@ class UserController extends Controller
 
 
     }
-
-
+    // connexion
     public function login(Request $request){
         
         /* dd($request); */
@@ -98,7 +97,7 @@ class UserController extends Controller
                     
                     $us = User::find($user[0]->id);
                     $token = $us->createToken('token-name')->plainTextToken;
-
+                    
                     return response()->json([
                         'status' => 'true',
                         'message' => 'connexion reussi',
@@ -120,7 +119,7 @@ class UserController extends Controller
             }
         }
     }
-
+    // recupere les informations des agents immobilier
     public function someInformationSeller(){
 
         $dataSellerFiltred = array();
@@ -153,13 +152,24 @@ class UserController extends Controller
         }
 
     }
-
     // deconnexion
     public function logout(){
-        auth()->user()->tokens()->delete();
+        try {
+            auth()->user()->tokens()->delete();
 
-        return response()->json([
-            "message" => "déconnecté"
-        ]);
+            return response()->json([
+                "status" => "true",
+                "message" => "déconnecté",
+            ]);
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                "status" => "false",
+                "message" => "erreur lors de la  déconnexion",
+            ]);
+
+        }
+
+
     }
 }

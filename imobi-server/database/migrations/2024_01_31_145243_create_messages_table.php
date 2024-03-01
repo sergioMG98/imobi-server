@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('firstnameSender');
             $table->integer('phoneSender');
             $table->string('mailSender')->nullable();
+            $table->string('referenceAnnonce')->nullable();
             $table->timestamps();
         });
     }
