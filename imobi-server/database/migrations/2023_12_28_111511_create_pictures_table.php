@@ -19,11 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained();
             $table->timestamps();
         });
-/*         Schema::create('picture_product', function(Blueprint $table){
-            $table->foreignIdFor(Picture::class)->constrained();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->primary(['picture_id', 'product_id']);
-        }); */
     }
 
     /**
@@ -31,7 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-/*         Schema::dropIfExists('picture_product'); */
         Schema::dropIfExists('pictures');
     }
 };

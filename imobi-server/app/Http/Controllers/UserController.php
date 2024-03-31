@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Password;
+
+use App\Mail\MyEmail;
+use Illuminate\View\View;
+
+// Caractères majuscules anglais (A – Z)
+// Caractères minuscules anglais (a – z)
+// Base 10 chiffres (0 – 9)
+// Non alphanumérique (par exemple : !, $, # ou %)
+// Caractères Unicode
+
 class UserController extends Controller
 {
     //creation de compte
@@ -17,8 +28,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'lastname' => 'required|string',
             'firstname' => 'required|string',
-            'email' => 'required|string',
-            'password' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|regex:/^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@#$%^&*_=+-]).*$/',
         ]);
         
         
@@ -70,14 +81,14 @@ class UserController extends Controller
     // connexion
     public function login(Request $request){
         
-        /* dd($request); */
         // condition des data 
         $validator = Validator::make($request->all(), [
             'email' => 'required|string',
-            'password' => 'required',
+            'password' => 'required|regex:/^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@#$%^&*_=+-]).*$/',
         ]);
         
         if($validator->fails()){
+            
             // si la validation des data echoue
             return response()->json([
                 'status' => 'false',

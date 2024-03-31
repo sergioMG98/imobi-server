@@ -9,7 +9,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ContactController;
 
+use App\Http\Controllers\MailController;
+use App\Mail\MyEmail;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/getProductOfCustomer', [ClientController::class, 'getProductOfCustomer']);
     
     Route::get('/logout' , [UserController::class , 'logout']);
+    Route::get('/deleteUser', [DashboardController::class, 'deleteUser']);
     
 });
 
@@ -53,4 +57,6 @@ Route::post('getProductById', [ProductController::class, 'getProductById']);
 
 Route::get('getProduct', [ProductController::class, 'getProduct']);
 Route::post('getProductSpecific', [ProductController::class, 'getProductSpecific']);
-
+// reinitialisation mot de passe
+Route::post('/verifyExist', [MailController::class, 'store']);
+Route::post('/resetPasswordLink', [MailController::class, 'resetPassword']);

@@ -17,18 +17,12 @@ class ProductController extends Controller
     // pour affichage ( home )
     public function getProduct(){
         $product = DB::table('products')
+            ->where('status', 'sell')
+            ->orWhere('status', 'rent')
             ->get();
         
         $imageProducts = DB::table('pictures')
             ->get();
-        
-        // $img = array();
-
-        // foreach ($imageProducts as $key => $imageProduct) {
-        //     array_push($img, $imageProduct);
-        // }
-
-        // $imageUrl = array();
 
         foreach ($imageProducts as $key => $value) {
             $value->picture = asset('/storage/' . $value->picture);
@@ -58,12 +52,7 @@ class ProductController extends Controller
         
         $imageProducts = DB::table('pictures')
             ->get();
-        
-        // $img = array();
 
-        // foreach ($imageProducts as $key => $imageProduct) {
-        //     array_push($img, $imageProduct);
-        // }
 
         $imageUrl = array();
 
@@ -79,26 +68,28 @@ class ProductController extends Controller
     }
     // pour affichage des details ( detailsPage )
     public function getProductById(Request $request){
-
+        // recupere le produit
         $details = DB::table('products')
             ->where('products.id', $request->status)
             ->get();
-
+        // recupere les images du produits
         $imageProducts = DB::table('pictures')
             ->where('product_id', $details[0]->id)
             ->get();
         
+        $productOwner = Product::find($details[0]->id)->client;
+        /* dd($productOwner); */
         $imageUrl = array();
 
         foreach ($imageProducts as $key => $value) {
             array_push($imageUrl, asset('/storage/' . $value->picture));
         }
 
-       /*  $imageUrl = asset('/storage/' . $imageProduct[0]->picture); */
         
         return response()->json([
             'product' => $details[0],
             'imageProduct' => $imageUrl,
+            'productOwner' => $productOwner[0]
         ]);
     }
 

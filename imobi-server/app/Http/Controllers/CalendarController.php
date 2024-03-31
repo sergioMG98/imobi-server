@@ -15,15 +15,15 @@ class CalendarController extends Controller
     public function addEvents(Request $request){
         
         $validator = Validator::make($request->all(), [
-            'date' => 'required',
+            'date' => 'required|date',
             'startVisit' => 'required', 
             'endVisit' => 'required',
             'adresse' => 'required',
             'title'  => 'required', 
-            'lastnameVisitor' => 'required', 
-            'firstnameVisitor' => 'required', 
-            'phoneVisitor' => 'required', 
-            'phoneOwner' => 'required',
+            'lastnameVisitor' => 'required|alpha:ascii', 
+            'firstnameVisitor' => 'required|string', 
+            'phoneVisitor' => 'required|numeric', 
+            'phoneOwner' => 'nullable|numeric',
         ]);
         
         if($validator->fails()){
@@ -31,6 +31,7 @@ class CalendarController extends Controller
             return response()->json([
                 'status' => 'false',
                 'data' => $validator -> Errors($validator),
+                'message' => 'valeur(s) entée non correct'
             ]);
         } else {
             $user_id = Auth::id();
@@ -49,9 +50,13 @@ class CalendarController extends Controller
                     'user_id' => $user_id,
                 ]);
 
+                $allEvents = DB::table('events')
+                    ->get();
+
                 return response()->json([
                     'status' => 'true',
                     'message' => 'event crée',
+                    'events' => $allEvents
                 ]);
             } catch (\Throwable $th) {
 
@@ -101,37 +106,59 @@ class CalendarController extends Controller
     } 
     // modifie les events
     public function updateEvents(Request $request){
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date',
+            'startVisit' => 'required', 
+            'endVisit' => 'required',
+            'adresse' => 'required',
+            'title'  => 'required', 
+            'lastnameVisitor' => 'required|alpha:ascii', 
+            'phoneVisitor' => 'required|numeric', 
+            'phoneOwner' => 'nullable|numeric',
+        ]);
 
-
-
-        try {
-            
-            $event = Event::find($request->id);
-
-            $event->date = $request->date;
-            $event->startVisit = $request->startVisit;
-            $event->endVisit = $request->endVisit;
-            $event->adresse = $request->adresse;
-            $event->title = $request->title;
-            $event->lastnameVisitor = $request->lastnameVisitor;
-            $event->firstnameVisitor = $request->firstnameVisitor;
-            $event->phoneVisitor = $request->phoneVisitor;
-            $event->phoneOwner = $request->phoneOwner;
-
-            $event->save();
-
-            return response()->json([
-                'status' => 'true',
-                'message' => 'modification reussi'
-            ]);
-
-        } catch (\Throwable $th) {
+        if($validator->fails()){
             
             return response()->json([
                 'status' => 'false',
-                'message' => 'modification echoué ! ',
-                'error' => $th,
+                'data' => $validator -> Errors($validator),
+                'message' => 'certain des valeurs modifier son incorrect'
             ]);
+        } else {
+
+            try {
+                
+                $event = Event::find($request->id);
+
+                $event->date = $request->date;
+                $event->startVisit = $request->startVisit;
+                $event->endVisit = $request->endVisit;
+                $event->adresse = $request->adresse;
+                $event->title = $request->title;
+                $event->lastnameVisitor = $request->lastnameVisitor;
+                $event->firstnameVisitor = $request->firstnameVisitor;
+                $event->phoneVisitor = $request->phoneVisitor;
+                $event->phoneOwner = $request->phoneOwner;
+
+                $event->save();
+
+                $allEvents = DB::table('events')
+                    ->get();
+
+                return response()->json([
+                    'status' => 'true',
+                    'message' => 'modification reussi',
+                    'events' => $allEvents
+                ]);
+
+            } catch (\Throwable $th) {
+                
+                return response()->json([
+                    'status' => 'false',
+                    'message' => 'modification echoué ! ',
+                    'error' => $th,
+                ]);
+            }
         }
     }
     // supprime les events
@@ -143,14 +170,14 @@ class CalendarController extends Controller
 
             return response()->json([
                 'status' => 'true',
-                'message' => 'suppression réussie'
+                'message' => 'Suppression réussie'
             ]);
 
         } catch (\Throwable $th) {
             
             return response()->json([
                 'status' => 'false',
-                'message' => 'suppression échouer'
+                'message' => 'Suppression échouée'
             ]);
         }
 

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('longitude', 8, 6)->nullable();
             $table->string('city')->nullable();
             $table->string('label')->nullable();
+            $table->string('tokenPasswordReset')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('lastnameVisitor');
             $table->string('firstnameVisitor');
             $table->string('phoneVisitor');
-            $table->string('phoneOwner');
+            $table->string('phoneOwner')->nullable();
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
         });

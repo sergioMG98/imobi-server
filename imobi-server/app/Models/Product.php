@@ -18,15 +18,19 @@ class Product extends Model
     use HasFactory;
     protected $fillable = ['status', 'prix', 'description', 'surface', 'ges', 'dpe', 'type', 'piece', 'surfaceTerrain', 'salleDeBain', 'chambre', 'terrasse', 'balcon', 'garage', 'piscine', 'ascenseur', 'cave', 'longitude', 'latitude','ville', 'user_id', 'label'];
 
-    public function client(): HasOne
+/*     public function client(): HasOne
     {
         return $this->hasOne(Client::class);
+    } */
+    public function client(): BelongsToMany
+    {
+        return $this->belongsToMany(Client::class);
     }
 
-    public function caracteristique(): HasOne
+/*     public function caracteristique(): HasOne
     {
         return $this->hasOne(Caracteristique::class);
-    }
+    } */
 
 /*     public function picture(): BelongsToMany
     {

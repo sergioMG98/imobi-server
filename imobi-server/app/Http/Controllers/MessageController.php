@@ -15,11 +15,11 @@ class MessageController extends Controller
     // cree un message
     public function setMessage(Request $request){
         $validator = Validator::make($request->all(), [
-            'message' => 'required',
-            'lastnameOfCustomer' => 'required', 
-            'firstnameOfCustomer' => 'required', 
-            'phoneOfCustomer' => 'required',
-            'seller_id' => 'required',  
+            'message' => 'required|string',
+            'lastnameOfCustomer' => 'required|string', 
+            'firstnameOfCustomer' => 'required|string', 
+            'phoneOfCustomer' => 'required|numeric',
+            'seller_id' => 'required|numeric',  
         ]);
         
         if($validator->fails()){
@@ -45,7 +45,7 @@ class MessageController extends Controller
                     'firstnameSender' => $request->firstnameOfCustomer, 
                     'phoneSender' => $request->phoneOfCustomer,
                     'mailSender' => $request->mailOfCustomer,
-                    'referenceAnnonce' => $request->referenceAnnonce,
+                    'referenceAnnonce' => $request->referenceAnnonce ? $request->referenceAnnonce : null,
                 ]);
 
                 return response()->json([

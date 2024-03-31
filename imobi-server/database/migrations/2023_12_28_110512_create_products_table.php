@@ -43,7 +43,7 @@ return new class extends Migration
 
         Schema::create('client_product', function(Blueprint $table){
             $table->foreignIdFor(Client::class)->constrained();
-            $table->foreignIdFor(Product::class)->constrained();
+            $table->foreignIdFor(Product::class)->constrained()->onDelete('cascade');
             $table->primary(['client_id', 'product_id']);
         });
     }
